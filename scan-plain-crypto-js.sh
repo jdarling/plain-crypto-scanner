@@ -98,7 +98,7 @@ function addSummaryLine() {
   local summaryLine="$1"
   local existingLine=""
 
-  for existingLine in "${SUMMARY_LINES[@]}"; do
+  for existingLine in "${SUMMARY_LINES[@]:-}"; do
     [[ "${existingLine}" == "${summaryLine}" ]] && return 0
   done
 
@@ -124,7 +124,7 @@ function pathExistsInSearchDirs() {
   local candidatePath="$1"
   local existingPath=""
 
-  for existingPath in "${SEARCH_DIRS[@]}"; do
+  for existingPath in "${SEARCH_DIRS[@]:-}"; do
     [[ "${existingPath}" == "${candidatePath}" ]] && return 0
   done
 
@@ -201,7 +201,7 @@ function discoverSearchDirs() {
     addCommonDirsForHome "${windowsHome}"
   fi
 
-  for extraDir in "${EXTRA_DIRS[@]}"; do
+  for extraDir in "${EXTRA_DIRS[@]:-}"; do
     addSearchDir "${extraDir}"
   done
 }
@@ -439,7 +439,7 @@ function printSummary() {
     return 0
   fi
 
-  for summaryLine in "${SUMMARY_LINES[@]}"; do
+  for summaryLine in "${SUMMARY_LINES[@]:-}"; do
     echo "${summaryLine}"
   done
 
@@ -665,7 +665,7 @@ function parseArgs() {
 function validateInputs() {
   local extraDir=""
 
-  for extraDir in "${EXTRA_DIRS[@]}"; do
+  for extraDir in "${EXTRA_DIRS[@]:-}"; do
     if [[ -d "${extraDir}" ]]; then
       continue
     fi
@@ -690,7 +690,7 @@ function main() {
   logInfo "Scanning ${#SEARCH_DIRS[@]} directories from ${WORK_DIR}"
   echo ""
 
-  for searchDir in "${SEARCH_DIRS[@]}"; do
+  for searchDir in "${SEARCH_DIRS[@]:-}"; do
     scannedCount="$((scannedCount + 1))"
     logInfo "Scanning directory ${scannedCount}/${#SEARCH_DIRS[@]}: ${searchDir}"
     if ! scanPath "${searchDir}"; then
