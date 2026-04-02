@@ -202,6 +202,7 @@ function discoverSearchDirs() {
   fi
 
   for extraDir in "${EXTRA_DIRS[@]:-}"; do
+    [[ -n "${extraDir}" ]] || continue
     addSearchDir "${extraDir}"
   done
 }
@@ -666,6 +667,7 @@ function validateInputs() {
   local extraDir=""
 
   for extraDir in "${EXTRA_DIRS[@]:-}"; do
+    [[ -n "${extraDir}" ]] || continue
     if [[ -d "${extraDir}" ]]; then
       continue
     fi
