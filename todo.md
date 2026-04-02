@@ -6,6 +6,10 @@ This file tracks completed work and next steps for the `plain-crypto-check` proj
 
 - Repository path: `/home/jdarling/plain-crypto-check`
 - Primary script: `scan-plain-crypto-js.sh`
+- Script versioning:
+  - `scan-plain-crypto-js.sh` now has a top-level `VERSION` variable
+  - manage it as semantic versioning (`MAJOR.MINOR.PATCH`)
+  - for this project, bump at least the minor version on each shipped change unless there is a better reason to use patch or major
 - Supporting docs:
   - `README.md`
   - `LICENSE`

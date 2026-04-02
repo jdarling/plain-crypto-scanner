@@ -8,6 +8,7 @@ declare SCRIPT_NAME="$(basename "$0")"
 declare SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -P)"
 declare WORK_DIR="$(pwd -P)"
 declare ROOT_DIR="${SCRIPT_DIR}"
+declare VERSION="0.1.3"
 declare SEARCH_PATTERN='plain-crypto-js|axios[^[:alnum:]]*(1\.14\.1|0\.30\.4|latest|legacy)|version["'\'']?[[:space:]:=]+["'\'']?(1\.14\.1|0\.30\.4)'
 declare CONTEXT_LINES="2"
 declare SNIPPET_CONTEXT_CHARS="16"
@@ -44,6 +45,7 @@ function showHelp() {
   local errorMessage="${2:-""}"
 
   echo "Usage: ${SCRIPT_NAME} [--project <path>] [--folder <path>]..."
+  echo "Version: ${VERSION}"
   echo ""
   echo "Scan common JavaScript package caches and optional folders for"
   echo "plain-crypto-js and tainted axios references."
@@ -52,6 +54,7 @@ function showHelp() {
   echo "  --project <path>     Add a project directory to scan"
   echo "  --folder <path>      Add any directory to scan"
   echo "  --verbose            Show full matching lines with surrounding context"
+  echo "  --version            Show script version"
   echo "  -v, -vv, -vvv        Same as --verbose"
   echo "  -h, --help           Show this help message"
   echo ""
@@ -76,6 +79,10 @@ function showHelp() {
 function trim() {
   local rawValue="$1"
   printf '%s' "${rawValue}" | sed -e 's/\r//g' -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'
+}
+
+function showVersion() {
+  echo "${SCRIPT_NAME} ${VERSION}"
 }
 
 function runCommand() {
@@ -648,6 +655,10 @@ function parseArgs() {
       --verbose)
         VERBOSE="1"
         shift
+        ;;
+      --version)
+        showVersion
+        exit 0
         ;;
       -v*)
         VERBOSE="1"
