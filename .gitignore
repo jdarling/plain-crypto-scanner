@@ -1,0 +1,20 @@
+# macOS
+.DS_Store
+
+# Linux / Windows editor temp files
+*~
+*.swp
+*.swo
+
+# IDEs and editors
+.idea/
+.vscode/
+
+# Shell and local temp outputs
+*.tmp
+*.temp
+*.log
+
+# Test and scratch artifacts
+/tmp/
+/coverage/

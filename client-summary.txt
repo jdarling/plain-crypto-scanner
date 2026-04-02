@@ -1,0 +1,32 @@
+Axios RAT / plain-crypto-js Client Summary
+
+Problem:
+On March 31, 2026, the official npm package for Axios was compromised through a maintainer account takeover. Two malicious releases, axios@1.14.1 and axios@0.30.4, added a hidden dependency on plain-crypto-js@4.2.1. Security advisories state that any machine that ran npm install while those versions were live should be treated as fully compromised because the dependency executed a postinstall script that downloaded a cross-platform remote access trojan for macOS, Windows, and Linux. [1][2][3]
+
+Solution:
+We built a local scan script to check common npm, Yarn, pnpm, and Bun cache locations plus any project folders you specify for signs of plain-crypto-js and the known compromised Axios releases. The script prints the file path, the matching line, and nearby context so teams can quickly confirm whether a workstation, CI runner, or project cache contains indicators tied to this incident.
+
+Specific Results:
+The known malicious Axios versions were axios@1.14.1 and axios@0.30.4. The malicious dependency was plain-crypto-js@4.2.1. Reported publication times were 00:21 UTC for axios@1.14.1 and 01:00 UTC for axios@0.30.4 on March 31, 2026. Multiple security sources reported removal around 03:25 to 03:29 UTC the same day. Datadog reported that axios@1.14.1 was tagged as latest during that window, which means an unpinned npm install axios could have pulled the compromised package. [1][3][4][5]
+
+Technical Evidence:
+GitLab advisory GHSA-fw8c-xr5c-95f9 states that the malicious packages injected plain-crypto-js@4.2.1, contacted a command-and-control server, and downloaded a platform-specific second-stage payload. [1]
+StepSecurity reported the dependency was never imported by Axios source code and existed only to execute a postinstall RAT dropper. StepSecurity also reported the attacker bypassed the normal GitHub Actions CI/CD path and published directly with compromised maintainer credentials. [2]
+Snyk reported the command-and-control endpoint as sfrclak[.]com:8000 and advised teams to audit lockfiles and rotate secrets if exposed. [3]
+Datadog published concrete indicators including sfrclak[.]com, 142.11.206.73, and filesystem artifacts such as /tmp/ld.py on Linux, %PROGRAMDATA%\wt.exe on Windows, and /Library/Caches/com.apple.act.mond on macOS. [4]
+OSV summarizes the incident as malicious code in axios and states that all secrets and keys stored on any affected computer should be rotated from a different computer. [5]
+
+Next action:
+Run the scan script across developer workstations, CI runners, and any build caches that may have pulled npm dependencies on March 31, 2026. If any indicator is found, treat that system as compromised, rotate secrets from a clean machine, and rebuild the affected environment instead of trying to clean it in place.
+
+Additional reference:
+See affected-products.md for a user-facing triage list of commonly used products and workflows that may have resolved Axios during the compromise window.
+
+Sources:
+[1] GitLab Advisory Database, GHSA-fw8c-xr5c-95f9, https://advisories.gitlab.com/pkg/npm/axios/GHSA-fw8c-xr5c-95f9/
+[2] StepSecurity, axios Compromised on npm - Malicious Versions Drop Remote Access Trojan, https://www.stepsecurity.io/blog/axios-compromised-on-npm-malicious-versions-drop-remote-access-trojan
+[3] Snyk, Axios npm Package Compromised: Supply Chain Attack Delivers Cross-Platform RAT, https://snyk.io/es/blog/axios-npm-package-compromised-supply-chain-attack-delivers-cross-platform/
+[4] Datadog Security Labs, Compromised axios npm package delivers cross-platform RAT, https://securitylabs.datadoghq.com/articles/axios-npm-supply-chain-compromise/
+[5] OSV, MAL-2026-2307, https://osv.dev/vulnerability/MAL-2026-2307
+[6] Axios issue tracker, axios@1.14.1 and axios@0.30.4 are compromised, https://github.com/axios/axios/issues/10604
+[7] Potentially affected products and workflows, ./affected-products.md
