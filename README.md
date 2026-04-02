@@ -63,6 +63,20 @@ Show help:
 ./scan-plain-crypto-js.sh --verbose --project /path/to/repo
 ```
 
+Run directly from a hosted raw script URL:
+
+**wget**
+
+```bash
+wget -qO- 'https://raw.githubusercontent.com/jdarling/plain-crypto-scanner/refs/heads/main/scan-plain-crypto-js.sh' | bash
+```
+
+**curl**
+
+```bash
+curl -fsSL 'https://raw.githubusercontent.com/jdarling/plain-crypto-scanner/refs/heads/main/scan-plain-crypto-js.sh' | bash
+```
+
 ## What It Detects
 
 The scanner looks for content and filenames associated with:
